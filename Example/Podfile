@@ -1,7 +1,9 @@
 use_frameworks!
+platform :ios, '11.0'
 
 target 'WebViewConsole_Example' do
-  pod 'WebViewConsole', :path => '../'
+  pod 'WebViewConsole/Console', :path => '../'
+  pod 'WebViewConsole/ConsoleView', :path => '../'  
 
   target 'WebViewConsole_Tests' do
     inherit! :search_paths

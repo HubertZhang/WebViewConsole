@@ -7,12 +7,28 @@
 //
 
 import UIKit
+import WebKit
+import WebViewConsole
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var webView: WKWebView!
+    let console = WebViewConsole()
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        console.setup(webView: webView)
+        webView.load(URLRequest(url: URL(string: "https://github.com")!))
+    }
+
+    @IBAction func displayConsoleView(_ sender: UIBarButtonItem) {
+        let vc = ConsoleViewController()
+        vc.console = console
+        let vc1 = UINavigationController.init(rootViewController: vc)
+        vc.navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: vc, action: #selector(ConsoleViewController.dismissSelf))
+        vc1.modalPresentationStyle = UIModalPresentationStyle.popover
+        vc1.popoverPresentationController?.barButtonItem = sender
+        self.present(vc1, animated: true, completion: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,3 +38,8 @@ class ViewController: UIViewController {
 
 }
 
+extension ConsoleViewController {
+    @objc func dismissSelf() {
+        self.dismiss(animated: true, completion: nil)
+    }
+}
