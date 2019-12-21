@@ -34,6 +34,9 @@ public class WebViewConsole {
         let messageHandler = ConsoleMessageHandler()
         messageHandler.delegate = self
         webView.configuration.userContentController.add(messageHandler, name: name)
+    }
+    
+    public func setupUserScript(to webView: WKWebView) {
         webView.configuration.userContentController.addUserScript(ConsoleMessageHandler.script(with: name))
     }
 
