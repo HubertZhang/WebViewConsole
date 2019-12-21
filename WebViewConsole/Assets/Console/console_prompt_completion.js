@@ -386,7 +386,7 @@
 		}
 
 		if (_completions.length) {
-			return JSON.stringify(result);
+			return result;
 		} else {
 			return;
 		}
