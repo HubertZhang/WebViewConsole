@@ -51,7 +51,7 @@ public class ConsoleViewController: UIViewController {
 
     }
 
-    @objc func dismissSelf() {
+    @objc public func dismissSelf() {
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -73,7 +73,7 @@ public class ConsoleViewController: UIViewController {
         consoleInputViewController.didMove(toParent: self)
     }
 
-    @objc func clearClicked(_ sender: Any) {
+    @objc public func clearClicked(_ sender: Any) {
         self.console.clearMessages()
     }
 }
