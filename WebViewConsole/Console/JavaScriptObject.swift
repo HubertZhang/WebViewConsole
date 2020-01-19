@@ -11,12 +11,25 @@ protocol NativeJavaScriptObject {
     func convert() -> JavaScriptObject
 }
 
-protocol JavaScriptObject: CustomStringConvertible {
+protocol JavaScriptObject {
     var boolValue: Bool { get }
+    func toString() -> String
 }
 
+class _JavaScriptUnknown: JavaScriptObject {
+    func toString() -> String {
+        return "<unknown>"
+    }
+
+    var boolValue: Bool {
+        return false
+    }
+}
+
+let JavaScriptUnknown = _JavaScriptUnknown()
+
 class _JavaScriptUndefined: JavaScriptObject {
-    var description: String {
+    func toString() -> String {
         return "<undefined>"
     }
 
@@ -25,8 +38,16 @@ class _JavaScriptUndefined: JavaScriptObject {
     }
 }
 
+let JavaScriptUndefined = _JavaScriptUndefined()
+
+extension NSNull: NativeJavaScriptObject {
+    func convert() -> JavaScriptObject {
+        return JavaScriptNull
+    }
+}
+
 class _JavaScriptNull: JavaScriptObject {
-    var description: String {
+    func toString() -> String {
         return "<null>"
     }
 
@@ -35,14 +56,7 @@ class _JavaScriptNull: JavaScriptObject {
     }
 }
 
-let JavaScriptUndefined = _JavaScriptUndefined()
 let JavaScriptNull = _JavaScriptNull()
-
-extension NSNull: NativeJavaScriptObject {
-    func convert() -> JavaScriptObject {
-        return JavaScriptNull
-    }
-}
 
 extension NSDate: NativeJavaScriptObject {
     func convert() -> JavaScriptObject {
@@ -51,12 +65,10 @@ extension NSDate: NativeJavaScriptObject {
 }
 
 extension Date: JavaScriptObject {
-    var boolValue: Bool {
-        return true
+    func toString() -> String {
+        return self.description
     }
-}
 
-extension Array: JavaScriptObject where Element == JavaScriptObject {
     var boolValue: Bool {
         return true
     }
@@ -73,9 +85,15 @@ extension NSArray: NativeJavaScriptObject {
     }
 }
 
-extension String: JavaScriptObject {
+typealias JavaScriptArray = Array<JavaScriptObject>
+
+extension JavaScriptArray: JavaScriptObject {
+    func toString() -> String {
+        return self.description
+    }
+
     var boolValue: Bool {
-        return self != ""
+        return true
     }
 }
 
@@ -85,7 +103,35 @@ extension NSString: NativeJavaScriptObject {
     }
 }
 
-extension Dictionary: JavaScriptObject where Key == String, Value == JavaScriptObject {
+extension String: JavaScriptObject {
+    func toString() -> String {
+        return self
+    }
+
+    var boolValue: Bool {
+        return self != ""
+    }
+}
+
+typealias JavaScriptFunction = String
+
+func addIndent(_ string: String) -> String {
+    return string.split(separator: "\n").joined(separator: "    \n")
+}
+
+typealias JavaScriptDictionary = Dictionary<String, JavaScriptObject>
+
+extension JavaScriptDictionary: JavaScriptObject {
+    func toString() -> String {
+        var lines = [String]()
+        for key in self {
+            lines.append("    \(key.key): \(addIndent(key.value.toString()))")
+        }
+        lines.insert("{", at: 0)
+        lines.append("}")
+        return lines.joined(separator: "\n")
+    }
+
     var boolValue: Bool {
         return true
     }
@@ -93,58 +139,57 @@ extension Dictionary: JavaScriptObject where Key == String, Value == JavaScriptO
 
 extension NSDictionary: NativeJavaScriptObject {
     func convert() -> JavaScriptObject {
-        if let type = self["__type"] {
-            guard let type = type as? String else {
-                return JavaScriptNull
+        guard let type = self["__type"] as? String else {
+            return JavaScriptUnknown
+        }
+        let value = self["__value"]
+        switch type {
+        case "undefined":
+            return JavaScriptUndefined
+        case "null":
+            return JavaScriptNull
+        case "bigint":
+            return (value as? NSNumber)?.int64Value ?? Int64(0)
+        case "boolean":
+            return (value as? NSNumber)?.boolValue ?? false
+        case "number":
+            return (value as? NSNumber)?.floatValue ?? Float(0)
+        case "string":
+            return value as? String ?? ""
+        case "date":
+            return (value as? NSDate)?.convert() ?? Date.init(timeIntervalSince1970: 0)
+        case "array":
+            guard let value = value as? NSArray else {
+                return JavaScriptUnknown
             }
-            if type == "undefined" {
-                return JavaScriptUndefined
+            return value.map { (ele) -> JavaScriptObject in
+                guard let ele = ele as? NativeJavaScriptObject else {
+                    return JavaScriptUnknown
+                }
+                return ele.convert()
             }
-            guard let value = self["__value"] else {
-                return JavaScriptNull
+        case "object":
+            guard let value = value as? NSDictionary else {
+                return JavaScriptUnknown
             }
-            switch type {
-            case "bigint":
-                return (value as! NSNumber).int64Value
-            case "boolean":
-                return (value as! NSNumber).boolValue
-            case "number":
-                return (value as! NSNumber).floatValue
-            default:
-                return JavaScriptNull
-            }
-        } else {
-            var newDict = [String: JavaScriptObject]()
-            for key in self.allKeys {
+            var newDict = JavaScriptDictionary()
+            for key in value.allKeys {
                 guard let key = key as? String else {
                     continue
                 }
-                guard let value = self[key] as? NativeJavaScriptObject else {
+                guard let value = value[key] as? NativeJavaScriptObject else {
                     continue
                 }
                 newDict[key] = value.convert()
             }
             return newDict
+        case "function":
+            return value as? JavaScriptFunction ?? "<function>"
+        case "stringified_object":
+            return value as? String ?? ""
+        default:
+            return JavaScriptUnknown
         }
-    }
-
-}
-
-extension Int64: JavaScriptObject {
-    var boolValue: Bool {
-        return self != 0
-    }
-}
-
-extension Bool: JavaScriptObject {
-    var boolValue: Bool {
-        return self
-    }
-}
-
-extension Float: JavaScriptObject {
-    var boolValue: Bool {
-        return self != 0
     }
 }
 
@@ -154,49 +199,32 @@ extension NSNumber: NativeJavaScriptObject {
     }
 }
 
-//func convert(jsObject: NativeJavaScriptObject) -> String {
-//    switch jsObject {
-//    case is NSNull:
-//        return "null"
-//    case let string as NSString:
-//        return string as String
-//    case let date as NSDate:
-//        return date.description
-//    case let array as NSArray:
-//        guard let array = array as? [NativeJavaScriptObject] else {
-//            return ""
-//        }
-//        return "[\(array.map(convert).joined(separator: ", "))]"
-//    case let object as Dictionary<String, NativeJavaScriptObject>:
-//        if let type = object["__type"] {
-//            guard let type = type as? String else {
-//                return "[Unknown Type]"
-//            }
-//            if type == "undefined" {
-//                return "undefined"
-//            }
-//            guard let value = object["__value"] else {
-//                return "[Empty Type]"
-//            }
-//            switch type {
-//            case "bigint":
-//                return "\((value as! NSNumber).int64Value)"
-//            case "boolean":
-//                return (value as! NSNumber).boolValue ? "true" : "false"
-//            case "number":
-//                return (value as! NSNumber).floatValue.description
-//            default:
-//                return "[Unknown Type]"
-//            }
-//        } else {
-//            let kv =  object.map { (key: String, value: NativeJavaScriptObject) -> String in
-//                return "\"\(key)\": \(convert(jsObject: value))"
-//            }.joined(separator: ", ")
-//            return "{\(kv)}"
-//        }
-//    default:
-//        return ""
-//    }
-//
-//}
-//
+extension Int64: JavaScriptObject {
+    func toString() -> String {
+        return String.init(format: "%ld", self)
+    }
+
+    var boolValue: Bool {
+        return self != 0
+    }
+}
+
+extension Bool: JavaScriptObject {
+    func toString() -> String {
+        return self.description
+    }
+
+    var boolValue: Bool {
+        return self
+    }
+}
+
+extension Float: JavaScriptObject {
+    func toString() -> String {
+        return self.description
+    }
+
+    var boolValue: Bool {
+        return self != 0
+    }
+}
