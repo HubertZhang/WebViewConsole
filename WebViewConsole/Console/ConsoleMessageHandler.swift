@@ -57,7 +57,7 @@ public class ConsoleMessageHandler: NSObject, WKScriptMessageHandler {
                     guard let arg = arg as? NativeJavaScriptObject else {
                         return "[object Unknown]"
                     }
-                    return "\(arg.convert())"
+                    return arg.convert().toString()
                 }.joined(separator: " ")
             } else {
                 message += "console.assert"

@@ -20,10 +20,10 @@ extension ConsoleMessage: ConsoleMessageProtocol {
     public func getMessage() -> String {
         if let args = message as? Array<JavaScriptObject> {
             return args.map { (arg) -> String in
-                return "\(arg)"
+                return arg.toString()
             }.joined(separator: " ")
         }
-        return "\(message)"
+        return message.toString()
     }
 
     public func getLocation() -> String {
