@@ -18,7 +18,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         console.setup(webView: webView)
-        webView.load(URLRequest(url: URL(string: "https://github.com")!))
+        console.setupUserScript(to: webView)
+        webView.load(URLRequest(url: URL(string: "https://bing.com")!))
     }
 
     @IBAction func displayConsoleView(_ sender: UIBarButtonItem) {
