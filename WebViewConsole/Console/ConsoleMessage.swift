@@ -36,6 +36,9 @@ public struct ConsoleMessage {
             return caller!
         }
         guard let filePath = file else {
+            if source == .user || source == .userResult {
+                return ""
+            }
             return "unknown"
         }
         var filename: String = ""
