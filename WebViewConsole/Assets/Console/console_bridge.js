@@ -2,59 +2,18 @@
 
     if (window.__DebugConsole) return;
 
-    function __stringifyObject(result) {
-        try {
-            var resultType = typeof result;
-            if (resultType == 'string') {
-                return '"' + result + '"';
-            } else if (resultType == 'number' ||
-                resultType == 'boolean') {
-                return result;
-            } else if (resultType == 'undefined') {
-                return 'undefined';
-            } else if (result == null) {
-                return 'null';
-            } else if (resultType == 'function') {
-                return result.toString();
-            } else if (resultType == 'object') {
-                var cache = [];
-                var json = JSON.stringify(result, function (key, value) {
-                    if (typeof value === 'object' && value !== null) {
-                        if (cache.indexOf(value) !== -1) {
-                            // circular reference found, discard key
-                            return;
-                        }
-                        // store value in our collection
-                        cache.push(value);
-
-                        if (value != result) {
-                            // only print first level properties
-                            // otherwise you will get huge return value, when you quering things like 'window'
-                            return Object.prototype.toString.call(value);
-                        }
-                    }
-                    return value;
-                }, 4); // indented 4 spaces
-                cache = null; // enable garbage collection
-                return json;
-            }
-        } catch (error) {
-            return result;
-        }
-        return result;
-    }
-
     window.__DebugConsole = {};
 
     if (!window.console) return;
     function isNumber(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
-    function __logWithParams(params) {
+    function __forwardConsoleCall(consoleCall) {
         var interfaceName = config && config['handler'];
         if (interfaceName) {
+            consoleCall['args'] = __wrapArgs(consoleCall['args']);
             // window[interfaceName].invoke('privateConsoleLog', params);
-            window.webkit.messageHandlers[interfaceName].postMessage(params);
+            window.webkit.messageHandlers[interfaceName].postMessage(consoleCall);
         }
     }
     function __updateParams(params, error) {
@@ -116,14 +75,18 @@
         }
         return params;
     }
-    function __stringifyArgs(args) {
-        var result = [];
-        var n = args.length;
-        for (var i = 0; i < n; i++) {
-            arg = args[i];
-            result.push(__stringifyObject(arg));
+    function __wrapArgs(args) {
+        if (config['wrapper'] && typeof config['wrapper'] === 'function') {
+            var result = [];
+            var n = args.length;
+            for (var i = 0; i < n; i++) {
+                arg = args[i];
+                result.push(config['wrapper'](arg));
+            }
+            return result;
+        } else {
+            return args;
         }
-        return result;
     }
     for (var key in console) {
         (function (name) {
@@ -135,7 +98,7 @@
 
                 var params = {
                     'func': name,
-                    'args': __stringifyArgs(args),
+                    'args': args,
                 };
 
                 // retrive caller info
@@ -144,7 +107,7 @@
                 } catch (error) {
                     params = __updateParams(params, error);
                 }
-                __logWithParams(params);
+                __forwardConsoleCall(params);
             }
         }(key));
     }
@@ -160,7 +123,7 @@
                 'colno': event.colno,
                 'lineno': event.lineno,
             };
-            __logWithParams(params);
+            __forwardConsoleCall(params);
         });
     }());
 })

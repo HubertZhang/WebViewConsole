@@ -9,6 +9,7 @@ import Foundation
 import WebKit
 
 let resourceBundle = Bundle(url: Bundle(for: ConsoleMessageHandler.self).url(forResource: "Console", withExtension: "bundle")!)!
+let wrapperScript = try! String(contentsOf: resourceBundle.url(forResource: "object_wrapper", withExtension: "js")!)
 
 public protocol WebViewConsoleDataDelegate: class {
     func messagesUpdated()
@@ -35,7 +36,7 @@ public class WebViewConsole {
         messageHandler.delegate = self
         webView.configuration.userContentController.add(messageHandler, name: name)
     }
-    
+
     public func setupUserScript(to webView: WKWebView) {
         webView.configuration.userContentController.addUserScript(ConsoleMessageHandler.script(with: name))
     }
@@ -52,7 +53,7 @@ public class WebViewConsole {
 
     public func commit(command: String) {
         self.add(message: ConsoleMessage(source: .user, level: .none, message: command))
-        self.webView?.evaluateJavaScript(command, completionHandler: { (result, error) in
+        self.webView?.evaluateJavaScript(WebViewConsole.wrap(command: command), completionHandler: { (result, error) in
             if let error = error {
                 let error = error as NSError
                 let message = error.userInfo["WKJavaScriptExceptionMessage"] as? String ?? error.localizedDescription
@@ -66,6 +67,16 @@ public class WebViewConsole {
 
             self.add(message: ConsoleMessage(source: .userResult, level: .none, message: [result.convert()]))
         })
+    }
+
+    static func wrap(command: String) -> String {
+        var t = command
+        t = t.replacingOccurrences(of: "\\u000d\\u000a", with: "\n")
+        t = t.replacingOccurrences(of: "\n", with: "\\n")
+        t = t.replacingOccurrences(of: "\"", with: "\\\"")
+        return """
+        (\(wrapperScript))(eval("\(t)"))
+        """
     }
 
     var completionCommand: String = {

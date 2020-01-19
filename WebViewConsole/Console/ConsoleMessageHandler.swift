@@ -43,8 +43,6 @@ public class ConsoleMessageHandler: NSObject, WKScriptMessageHandler {
         let args = m["args"] as? NSArray ?? NSArray()
         let file = m["file"] as? String
         let lineNumber = m["lineno"] as? String
-//        let columnNumber = m["colno"] as? NSNumber
-//        print(args.convert())
         switch functionName {
         case "clear":
             self.delegate?.shouldClearMessage()
@@ -76,9 +74,8 @@ public class ConsoleMessageHandler: NSObject, WKScriptMessageHandler {
     public static func script(with name: String) -> WKUserScript {
         let scriptPath = resourceBundle.url(forResource: "console_bridge", withExtension: "js")
         let script = try! String(contentsOf: scriptPath!)
-        let para = ["handler": name]
         return WKUserScript(source:
-            script+"(\(String(data: try! JSONEncoder().encode(para), encoding: .utf8)!));",
+            "\(script)({handler: \"\(name)\", wrapper: \(wrapperScript)})",
             injectionTime: .atDocumentStart,
             forMainFrameOnly: false)
     }
