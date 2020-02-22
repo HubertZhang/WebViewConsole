@@ -19,7 +19,7 @@ public enum ConsoleMessageLevel: String {
     case none
     case debug
     case log
-    case warning
+    case warning = "warn"
     case error
 }
 
