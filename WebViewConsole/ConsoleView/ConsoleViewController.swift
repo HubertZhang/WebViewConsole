@@ -12,16 +12,16 @@ let viewControllerBundle = Bundle(url: Bundle(for: ConsoleViewController.self).u
 public class ConsoleViewController: UIViewController {
     @IBOutlet weak var messageTableView: UITableView!
 
-    convenience init() {
+    public convenience init(with console: Console, notificationName: Notification.Name) {
         self.init(nibName: "ConsoleViewController", bundle: viewControllerBundle)
-    }
-
-    var consoleObserver: Any?
-    public var console: Console! {
-        didSet {
-            console.set(delegate: self)
+        self.console = console
+        NotificationCenter.default.addObserver(forName: notificationName, object: nil, queue: .main) { [weak self] _ in
+            self?.messagesUpdated()
         }
     }
+    
+    var consoleObserver: Any?
+    var console: Console!
     var consoleInputViewController: ConsoleInputViewController!
 
     override public func viewDidLoad() {
@@ -75,6 +75,14 @@ public class ConsoleViewController: UIViewController {
     @objc public func clearClicked(_ sender: Any) {
         self.console.clearMessages()
     }
+    
+    public func messagesUpdated() {
+        let shouldScroll = self.messageTableView.isBottomVisible()
+        self.messageTableView.reloadData()
+        if shouldScroll && self.console.count() > 0 {
+            self.messageTableView.scrollToRow(at: IndexPath(row: self.console.count()-1, section: 0), at: .bottom, animated: true)
+        }
+    }
 }
 
 extension ConsoleViewController: UITableViewDataSource {
@@ -93,9 +101,12 @@ extension ConsoleViewController: UITableViewDataSource {
         cell.message.text = message.getMessage()
         cell.location.text = message.getLocation()
 
-        cell.setStyle(message: message)
+        cell.message.textColor = message.getLableColor()
+        cell.contentView.backgroundColor = message.getBackgroundColor()
+        cell.levelImage.image = message.getIcon()
+        cell.levelImage.tintColor = message.getLableColor()
 
-       return cell
+        return cell
     }
 }
 
@@ -129,50 +140,3 @@ extension ConsoleViewController: ConsoleInputUIDelegate {
     }
 }
 
-extension ConsoleViewController: WebViewConsoleDataDelegate {
-    public func messagesUpdated() {
-        let shouldScroll = self.messageTableView.isBottomVisible()
-        self.messageTableView.reloadData()
-        if shouldScroll && self.console.count() > 0 {
-            self.messageTableView.scrollToRow(at: IndexPath(row: self.console.count()-1, section: 0), at: .bottom, animated: true)
-        }
-    }
-
-    public func messageArrived() {
-
-    }
-}
-
-extension ConsoleMessageCell {
-    func setStyle(message: ConsoleMessageProtocol) {
-        let source = message.getSource()
-        let level = message.getLevel()
-
-        if #available(iOS 13.0, *) {
-            self.message.textColor = UIColor.label
-            self.contentView.backgroundColor = UIColor.systemBackground
-        } else {
-            self.message.textColor = UIColor.black
-            self.contentView.backgroundColor = UIColor.white
-        }
-        if source == .js {
-            let level = message.getLevel()
-            self.levelImage.image = level.image()?.withRenderingMode(.alwaysTemplate)
-            self.levelImage.tintColor = level.labelColor()
-            self.message.textColor = level.labelColor()
-            self.contentView.backgroundColor = level.backgroundColor()
-        } else if source == .navigation {
-            self.levelImage.image = source.image()?.withRenderingMode(.alwaysTemplate)
-            if level == .warning {
-                self.levelImage.tintColor = level.labelColor()
-            } else {
-                self.levelImage.tintColor = source.labelColor()
-            }
-        } else {
-            self.levelImage.image = source.image()?.withRenderingMode(.alwaysTemplate)
-            self.levelImage.tintColor = source.labelColor()
-            self.message.textColor = source.labelColor()
-        }
-    }
-
-}

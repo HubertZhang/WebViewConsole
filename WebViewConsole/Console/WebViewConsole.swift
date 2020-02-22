@@ -11,15 +11,11 @@ import WebKit
 let resourceBundle = Bundle(url: Bundle(for: ConsoleMessageHandler.self).url(forResource: "Console", withExtension: "bundle")!)!
 let wrapperScript = try! String(contentsOf: resourceBundle.url(forResource: "object_wrapper", withExtension: "js")!)
 
-public protocol WebViewConsoleDataDelegate: class {
-    func messagesUpdated()
-    func messageArrived()
-}
+public let WebViewConsoleMessageUpdated = Notification.Name("WebViewConsoleMessageUpdated")
 
 public class WebViewConsole {
     var name: String
 
-    public weak var delegate: WebViewConsoleDataDelegate?
     weak var webView: WKWebView?
 
     public convenience init() {
@@ -128,7 +124,7 @@ public class WebViewConsole {
     }
 
     func messageUpdated() {
-        self.delegate?.messagesUpdated()
+        NotificationCenter.default.post(name: WebViewConsoleMessageUpdated, object: self)
     }
 }
 
