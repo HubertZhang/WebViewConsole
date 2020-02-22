@@ -11,34 +11,34 @@ protocol NativeJavaScriptObject {
     func convert() -> JavaScriptObject
 }
 
-protocol JavaScriptObject {
+public protocol JavaScriptObject {
     var boolValue: Bool { get }
     func toString() -> String
 }
 
-class _JavaScriptUnknown: JavaScriptObject {
-    func toString() -> String {
+public class _JavaScriptUnknown: JavaScriptObject {
+    public func toString() -> String {
         return "<unknown>"
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return false
     }
 }
 
-let JavaScriptUnknown = _JavaScriptUnknown()
+public let JavaScriptUnknown = _JavaScriptUnknown()
 
-class _JavaScriptUndefined: JavaScriptObject {
-    func toString() -> String {
+public class _JavaScriptUndefined: JavaScriptObject {
+    public func toString() -> String {
         return "<undefined>"
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return false
     }
 }
 
-let JavaScriptUndefined = _JavaScriptUndefined()
+public let JavaScriptUndefined = _JavaScriptUndefined()
 
 extension NSNull: NativeJavaScriptObject {
     func convert() -> JavaScriptObject {
@@ -46,17 +46,17 @@ extension NSNull: NativeJavaScriptObject {
     }
 }
 
-class _JavaScriptNull: JavaScriptObject {
-    func toString() -> String {
+public class _JavaScriptNull: JavaScriptObject {
+    public func toString() -> String {
         return "<null>"
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return false
     }
 }
 
-let JavaScriptNull = _JavaScriptNull()
+public let JavaScriptNull = _JavaScriptNull()
 
 extension NSDate: NativeJavaScriptObject {
     func convert() -> JavaScriptObject {
@@ -65,11 +65,11 @@ extension NSDate: NativeJavaScriptObject {
 }
 
 extension Date: JavaScriptObject {
-    func toString() -> String {
+    public func toString() -> String {
         return self.description
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return true
     }
 }
@@ -88,11 +88,11 @@ extension NSArray: NativeJavaScriptObject {
 typealias JavaScriptArray = Array<JavaScriptObject>
 
 extension JavaScriptArray: JavaScriptObject {
-    func toString() -> String {
+    public func toString() -> String {
         return self.description
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return true
     }
 }
@@ -104,11 +104,11 @@ extension NSString: NativeJavaScriptObject {
 }
 
 extension String: JavaScriptObject {
-    func toString() -> String {
+    public func toString() -> String {
         return self
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return self != ""
     }
 }
@@ -122,7 +122,7 @@ func addIndent(_ string: String) -> String {
 typealias JavaScriptDictionary = Dictionary<String, JavaScriptObject>
 
 extension JavaScriptDictionary: JavaScriptObject {
-    func toString() -> String {
+    public func toString() -> String {
         var lines = [String]()
         for key in self {
             lines.append("    \(key.key): \(addIndent(key.value.toString()))")
@@ -132,7 +132,7 @@ extension JavaScriptDictionary: JavaScriptObject {
         return lines.joined(separator: "\n")
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return true
     }
 }
@@ -200,31 +200,31 @@ extension NSNumber: NativeJavaScriptObject {
 }
 
 extension Int64: JavaScriptObject {
-    func toString() -> String {
+    public func toString() -> String {
         return String.init(format: "%ld", self)
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return self != 0
     }
 }
 
 extension Bool: JavaScriptObject {
-    func toString() -> String {
+    public func toString() -> String {
         return self.description
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return self
     }
 }
 
 extension Float: JavaScriptObject {
-    func toString() -> String {
+    public func toString() -> String {
         return self.description
     }
 
-    var boolValue: Bool {
+    public var boolValue: Bool {
         return self != 0
     }
 }

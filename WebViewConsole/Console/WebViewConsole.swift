@@ -19,7 +19,7 @@ public protocol WebViewConsoleDataDelegate: class {
 public class WebViewConsole {
     var name: String
 
-    weak var delegate: WebViewConsoleDataDelegate?
+    public weak var delegate: WebViewConsoleDataDelegate?
     weak var webView: WKWebView?
 
     public convenience init() {

@@ -24,14 +24,14 @@ public enum ConsoleMessageLevel: String {
 }
 
 public struct ConsoleMessage {
-    var source: ConsoleMessageSource
-    var level: ConsoleMessageLevel
-    var message: JavaScriptObject
-    var caller: String?
-    var lineNumber: String?
-    var file: String?
+    public var source: ConsoleMessageSource
+    public var level: ConsoleMessageLevel
+    public var message: JavaScriptObject
+    public var caller: String?
+    public var lineNumber: String?
+    public var file: String?
 
-    var location: String {
+    public var location: String {
         if caller != nil {
             return caller!
         }
