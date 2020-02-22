@@ -1,6 +1,6 @@
 //
 //  ConsoleMessage.swift
-//  FBSnapshotTestCase
+//  WebViewConsole
 //
 //  Created by Hubert Zhang on 2019/11/11.
 //

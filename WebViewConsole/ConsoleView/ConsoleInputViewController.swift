@@ -1,9 +1,8 @@
 //
 //  ConsoleInputViewController.swift
-//  IITC-Mobile
+//  WebViewConsoleView
 //
 //  Created by Hubert Zhang on 2019/10/18.
-//  Copyright © 2019 IITC. All rights reserved.
 //
 
 import UIKit

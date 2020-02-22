@@ -1,9 +1,8 @@
 //
 //  ConsoleSuggestionTableViewController.swift
-//  IITC-Mobile
+//  WebViewConsoleView
 //
 //  Created by Hubert Zhang on 2019/10/22.
-//  Copyright © 2019 IITC. All rights reserved.
 //
 
 import UIKit

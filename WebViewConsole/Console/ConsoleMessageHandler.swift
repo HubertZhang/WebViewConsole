@@ -1,5 +1,5 @@
 //
-//  MessageHandler.swift
+//  ConsoleMessageHandler.swift
 //  WebviewConsole
 //
 //  Created by Hubert Zhang on 2019/11/11.
