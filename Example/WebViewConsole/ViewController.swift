@@ -23,8 +23,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func displayConsoleView(_ sender: UIBarButtonItem) {
-        let vc = ConsoleViewController()
-        vc.console = console
+        let vc = ConsoleViewController(with:console, notificationName: WebViewConsoleMessageUpdated)
         let vc1 = UINavigationController.init(rootViewController: vc)
         vc.navigationItem.leftBarButtonItem = UIBarButtonItem.init(barButtonSystemItem: .done, target: vc, action: #selector(ConsoleViewController.dismissSelf))
         vc1.modalPresentationStyle = UIModalPresentationStyle.popover
