@@ -185,7 +185,7 @@ extension ConsoleMessage: ConsoleMessageProtocol {
     }
 
     public func getMessage() -> String {
-        if let args = message as? Array<JavaScriptObject> {
+        if let args = message as? [JavaScriptObject] {
             return args.map { (arg) -> String in
                 return arg.toString()
             }.joined(separator: " ")

@@ -19,7 +19,7 @@ public class ConsoleViewController: UIViewController {
             self?.messagesUpdated()
         }
     }
-    
+
     var consoleObserver: Any?
     var console: Console!
     var consoleInputViewController: ConsoleInputViewController!
@@ -75,7 +75,7 @@ public class ConsoleViewController: UIViewController {
     @objc public func clearClicked(_ sender: Any) {
         self.console.clearMessages()
     }
-    
+
     public func messagesUpdated() {
         let shouldScroll = self.messageTableView.isBottomVisible()
         self.messageTableView.reloadData()
@@ -139,4 +139,3 @@ extension ConsoleViewController: ConsoleInputUIDelegate {
         }
     }
 }
-

@@ -254,7 +254,7 @@ class ConsoleInputViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     func toggleKeyboard() {
-        if (self.textView.isFirstResponder) {
+        if self.textView.isFirstResponder {
             self.textView.resignFirstResponder()
         } else {
             self.textView.becomeFirstResponder()
@@ -291,7 +291,7 @@ class ConsoleInputViewController: UIViewController, UIGestureRecognizerDelegate 
                 return
             }
 
-            if (!endFrame.isNull) {
+            if !endFrame.isNull {
                 self.keyboardHeight = max(UIScreen.main.bounds.height-endFrame.origin.y, 0)
             }
 
@@ -353,7 +353,7 @@ extension ConsoleInputViewController: UITextViewDelegate {
     }
 
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if (text == "\n" && !insertingNewLine) {
+        if text == "\n" && !insertingNewLine {
             self.commitCommand()
             return false
         }
@@ -369,7 +369,7 @@ extension ConsoleInputViewController: UITextViewDelegate {
     }
 
     func updateTextViewSuggestion(_ textView: UITextView) {
-        if (textView.text.count > 0 && textView.selectedRange.length == 0 && textView.isFirstResponder) {
+        if textView.text.count > 0 && textView.selectedRange.length == 0 && textView.isFirstResponder {
             self.updatePromptCompletion(text: textView.text, cursorIndex: textView.selectedRange.location)
         } else {
             self.stopPromptCompletion()

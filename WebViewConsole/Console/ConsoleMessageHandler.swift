@@ -36,7 +36,7 @@ public class ConsoleMessageHandler: NSObject, WKScriptMessageHandler {
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
 //        print("--- Message received ---\nName: \(message.name)\nArg:\n\(message.body)\n------")
-        guard let m = message.body as? Dictionary<String, Any> else {
+        guard let m = message.body as? [String: Any] else {
             return
         }
         let functionName = m["func"] as? String ?? "log"
@@ -48,7 +48,7 @@ public class ConsoleMessageHandler: NSObject, WKScriptMessageHandler {
             self.delegate?.shouldClearMessage()
         case "assert":
             let condition = args.firstObject as? NativeJavaScriptObject ?? NSNull()
-            if (condition.convert().boolValue) {
+            if condition.convert().boolValue {
                 return
             }
             var message = "Assertion failed: "

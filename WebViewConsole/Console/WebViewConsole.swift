@@ -97,7 +97,7 @@ public class WebViewConsole {
                 completion([], NSRange(location: NSNotFound, length: 0))
                 return
             }
-            guard let resultDict = result as? Dictionary<String, Any> else {
+            guard let resultDict = result as? [String: Any] else {
                 completion([], NSRange(location: NSNotFound, length: 0))
                 return
             }

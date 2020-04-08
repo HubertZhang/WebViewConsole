@@ -85,7 +85,7 @@ extension NSArray: NativeJavaScriptObject {
     }
 }
 
-typealias JavaScriptArray = Array<JavaScriptObject>
+typealias JavaScriptArray = [JavaScriptObject]
 
 extension JavaScriptArray: JavaScriptObject {
     public func toString() -> String {
@@ -119,7 +119,7 @@ func addIndent(_ string: String) -> String {
     return string.split(separator: "\n").joined(separator: "    \n")
 }
 
-typealias JavaScriptDictionary = Dictionary<String, JavaScriptObject>
+typealias JavaScriptDictionary = [String: JavaScriptObject]
 
 extension JavaScriptDictionary: JavaScriptObject {
     public func toString() -> String {
