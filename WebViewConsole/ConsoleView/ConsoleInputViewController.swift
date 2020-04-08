@@ -90,6 +90,10 @@ class ConsoleInputViewController: UIViewController, UIGestureRecognizerDelegate 
         self.uiDelegate?.viewHeightDidChange(self.view.frame.height)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        self.attachSuggestionTableView()
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         self.suggestionTableViewController.willMove(toParent: nil)
         self.suggestionTableViewController.view.removeFromSuperview()
@@ -120,11 +124,12 @@ class ConsoleInputViewController: UIViewController, UIGestureRecognizerDelegate 
         let vc = ConsoleSuggestionTableViewController(style: .plain)
         vc.delegate = self
         self.suggestionTableViewController = vc
-
-        suggestionTableViewHeightConstraint = vc.view.heightAnchor.constraint(equalToConstant: 0)
-
-        self.addChild(suggestionTableViewController)
         suggestionTableViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        suggestionTableViewHeightConstraint = vc.view.heightAnchor.constraint(equalToConstant: 0)
+    }
+
+    func attachSuggestionTableView() {
+        self.addChild(suggestionTableViewController)
         self.view.addSubview(suggestionTableViewController.view)
         NSLayoutConstraint.activate([
             suggestionTableViewController.view.topAnchor.constraint(equalTo: self.view.topAnchor),
