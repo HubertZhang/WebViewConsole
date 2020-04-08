@@ -7,8 +7,8 @@ PODS:
   - RSKGrowingTextView (5.0.2):
     - RSKPlaceholderTextView (= 5.0.2)
   - RSKPlaceholderTextView (5.0.2)
-  - WebViewConsole/Console (0.2.0)
-  - WebViewConsole/ConsoleView (0.2.0):
+  - WebViewConsole/Console (0.2.1)
+  - WebViewConsole/ConsoleView (0.2.1):
     - RSKGrowingTextView
 
 DEPENDENCIES:
@@ -30,7 +30,7 @@ SPEC CHECKSUMS:
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   RSKGrowingTextView: 9fdc68c8dabaacd54e23c316ff14b73aef034594
   RSKPlaceholderTextView: df72ca93edfac185b98f51cb85e445f54ce8a163
-  WebViewConsole: 8f7181ee852f47c5449cc6123eaa24424b989a07
+  WebViewConsole: 52e3416698569b034d0ffa3fa5a82191775fddd3
 
 PODFILE CHECKSUM: f10c82514922377be3d6141f7c139111b2110c90
 
