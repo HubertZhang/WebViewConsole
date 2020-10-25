@@ -117,7 +117,7 @@ class ConsoleInputViewController: UIViewController, UIGestureRecognizerDelegate 
     }
 
     // MARK: - Prompt Completion
-    weak var suggestionTableViewController: ConsoleSuggestionTableViewController!
+    var suggestionTableViewController: ConsoleSuggestionTableViewController!
     var suggestionTableViewHeightConstraint: NSLayoutConstraint!
 
     func setupSuggestionTableView() {
