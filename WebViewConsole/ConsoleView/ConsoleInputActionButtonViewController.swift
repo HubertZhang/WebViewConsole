@@ -27,7 +27,7 @@ import UIKit
             }
         } else {
             if #available(iOS 13.0, *) {
-                self.backgroundColor = self.isHighlighted ? UIColor(named: "buttonHighlighted") : UIColor.clear
+                self.backgroundColor = self.isHighlighted ? UIColor(named: "buttonHighlighted", in: viewControllerBundle, compatibleWith: nil) : UIColor.clear
                 self.textLabel.textColor = self.isHighlighted ?  UIColor.systemBackground:UIColor.label
             } else {
                 self.backgroundColor = self.isHighlighted ? UIColor(red: 0, green: 0.4609375, blue: 1, alpha: 1) : UIColor.clear
