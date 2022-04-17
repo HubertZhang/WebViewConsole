@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.5
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -28,10 +28,18 @@ let package = Package(
         .target(
             name: "WebViewConsole",
             dependencies: [],
-            path: "WebViewConsole/Console"),
+            path: "WebViewConsole/Console",
+            resources: [
+                .process("Resources")
+            ]
+        ),
         .target(
             name: "WebViewConsoleView",
-            dependencies: ["RSKGrowingTextView"],
-            path: "WebViewConsole/ConsoleView")
+            dependencies: ["RSKGrowingTextView", "WebViewConsole"],
+            path: "WebViewConsole/ConsoleView",
+            resources: [
+                .process("Resources")
+            ]
+        )
     ]
 )
