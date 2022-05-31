@@ -46,12 +46,12 @@ let package = Package(
                 "ConsoleView",
             ],
             resources: [
-                .copy("Assets/ConsoleView/Console.xcassets"),
-                .copy("Assets/ConsoleView/ConsoleInputActionButtonViewController.xib"),
-                .copy("Assets/ConsoleView/ConsoleInputActionView.xib"),
-                .copy("Assets/ConsoleView/ConsoleInputViewController.xib"),
-                .copy("Assets/ConsoleView/ConsoleMessageCell.xib"),
-                .copy("Assets/ConsoleView/ConsoleViewController.xib")
+                .process("Assets/ConsoleView/Console.xcassets"),
+                .process("Assets/ConsoleView/ConsoleInputActionButtonViewController.xib"),
+                .process("Assets/ConsoleView/ConsoleInputActionView.xib"),
+                .process("Assets/ConsoleView/ConsoleInputViewController.xib"),
+                .process("Assets/ConsoleView/ConsoleMessageCell.xib"),
+                .process("Assets/ConsoleView/ConsoleViewController.xib")
             ]
         )
     ]
