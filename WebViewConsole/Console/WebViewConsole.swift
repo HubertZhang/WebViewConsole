@@ -8,7 +8,11 @@
 import Foundation
 import WebKit
 
+#if SWIFT_PACKAGE
+let resourceBundle = Bundle.module
+#else
 let resourceBundle = Bundle(url: Bundle(for: ConsoleMessageHandler.self).url(forResource: "Console", withExtension: "bundle")!)!
+#endif
 let wrapperScript = try! String(contentsOf: resourceBundle.url(forResource: "object_wrapper", withExtension: "js")!)
 
 public let WebViewConsoleMessageUpdated = Notification.Name("WebViewConsoleMessageUpdated")

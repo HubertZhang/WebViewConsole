@@ -7,7 +7,11 @@
 
 import UIKit
 
+#if SWIFT_PACKAGE
+let viewControllerBundle = Bundle.module
+#else
 let viewControllerBundle = Bundle(url: Bundle(for: ConsoleViewController.self).url(forResource: "ConsoleView", withExtension: "bundle")!)!
+#endif
 
 public class ConsoleViewController: UIViewController {
     @IBOutlet weak var messageTableView: UITableView!
