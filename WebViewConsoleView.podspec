@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WebViewConsoleView'
-  s.version          = '0.3'
+  s.version          = '0.3.1'
   s.summary          = 'ConsoleView for WKWebView'
 
   # This description is used to generate tags and improve search results.

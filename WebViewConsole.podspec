@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WebViewConsole'
-  s.version          = '0.3'
+  s.version          = '0.3.1'
   s.summary          = 'Console and ConsoleView for WKWebView'
 
   # This description is used to generate tags and improve search results.
@@ -31,6 +31,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'WebViewConsole/Console/*.swift'
   s.resource_bundles = {
-    "Console" => ['WebViewConsole/Console/Resources/*.*']
+    'Console' => ['WebViewConsole/Console/Resources/*.*']
   }
 end
