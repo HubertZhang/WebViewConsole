@@ -7,9 +7,9 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'WebViewConsole'
+  s.name             = 'WebViewConsoleView'
   s.version          = '0.3'
-  s.summary          = 'Console and ConsoleView for WKWebView'
+  s.summary          = 'ConsoleView for WKWebView'
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-  Interrupt console messages of WKWebView in host app.
+  Display console messages of WKWebView in host app.
   DESC
 
   s.homepage         = 'https://github.com/Hubertzhang/WebViewConsole'
@@ -29,8 +29,11 @@ Pod::Spec.new do |s|
   s.swift_versions = '5.0'
   s.ios.deployment_target = '9.0'
 
-  s.source_files = 'WebViewConsole/Console/*.swift'
+  s.source_files = 'WebViewConsole/ConsoleView/*.swift'
   s.resource_bundles = {
-    "Console" => ['WebViewConsole/Console/Resources/*.*']
+    "ConsoleView" => ['WebViewConsole/ConsoleView/Resources/*.*']
   }
+
+  s.dependency 'WebViewConsole'
+  s.dependency 'RSKGrowingTextView'
 end
