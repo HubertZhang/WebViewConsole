@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ConsoleSuggestionTableViewDelegate: class {
+protocol ConsoleSuggestionTableViewDelegate: AnyObject {
     func choose(suggestion: String)
 }
 

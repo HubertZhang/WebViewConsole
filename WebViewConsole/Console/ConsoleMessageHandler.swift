@@ -8,7 +8,7 @@
 import Foundation
 import WebKit
 
-public protocol ConsoleMessageHandlerDelegate: class {
+public protocol ConsoleMessageHandlerDelegate: AnyObject {
     func didReceive(message: ConsoleMessage)
     func shouldClearMessage()
 }

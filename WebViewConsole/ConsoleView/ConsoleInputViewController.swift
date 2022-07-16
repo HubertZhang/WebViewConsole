@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ConsoleInputUIDelegate: class {
+protocol ConsoleInputUIDelegate: AnyObject {
     func viewHeightDidChange(_: CGFloat)
 }
 
