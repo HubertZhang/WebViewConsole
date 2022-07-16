@@ -1,37 +1,33 @@
 PODS:
-  - FBSnapshotTestCase (2.1.4):
-    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
-  - FBSnapshotTestCase/Core (2.1.4)
-  - FBSnapshotTestCase/SwiftSupport (2.1.4):
-    - FBSnapshotTestCase/Core
   - RSKGrowingTextView (5.0.2):
     - RSKPlaceholderTextView (= 5.0.2)
   - RSKPlaceholderTextView (5.0.2)
-  - WebViewConsole/Console (0.2.2)
-  - WebViewConsole/ConsoleView (0.2.2):
+  - WebViewConsole (0.3)
+  - WebViewConsoleView (0.3):
     - RSKGrowingTextView
+    - WebViewConsole
 
 DEPENDENCIES:
-  - FBSnapshotTestCase (~> 2.1.4)
-  - WebViewConsole/Console (from `../`)
-  - WebViewConsole/ConsoleView (from `../`)
+  - WebViewConsole (from `../`)
+  - WebViewConsoleView (from `../`)
 
 SPEC REPOS:
   trunk:
-    - FBSnapshotTestCase
     - RSKGrowingTextView
     - RSKPlaceholderTextView
 
 EXTERNAL SOURCES:
   WebViewConsole:
     :path: "../"
+  WebViewConsoleView:
+    :path: "../"
 
 SPEC CHECKSUMS:
-  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   RSKGrowingTextView: 9fdc68c8dabaacd54e23c316ff14b73aef034594
   RSKPlaceholderTextView: df72ca93edfac185b98f51cb85e445f54ce8a163
-  WebViewConsole: db561ab4f61198a9ead3f8b7c3f812296ca02124
+  WebViewConsole: fe5b844ac912e2ad62f87c46a4bd0481455a9fd5
+  WebViewConsoleView: b86385e4f076fe8a0b60fc1b0720cebc1377aab7
 
-PODFILE CHECKSUM: f10c82514922377be3d6141f7c139111b2110c90
+PODFILE CHECKSUM: 6295d0207797892cccd61732e66c5d2cffd33817
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.11.3

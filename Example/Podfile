@@ -2,12 +2,10 @@ use_frameworks!
 platform :ios, '11.0'
 
 target 'WebViewConsole_Example' do
-  pod 'WebViewConsole/Console', :path => '../'
-  pod 'WebViewConsole/ConsoleView', :path => '../'  
+  pod 'WebViewConsole', path: '../'
+  pod 'WebViewConsoleView', path: '../'
 
   target 'WebViewConsole_Tests' do
     inherit! :search_paths
-
-    pod 'FBSnapshotTestCase' , '~> 2.1.4'
   end
 end

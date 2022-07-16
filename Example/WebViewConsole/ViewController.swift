@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 import WebViewConsole
+import WebViewConsoleView
 
 class ViewController: UIViewController {
 
