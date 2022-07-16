@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'WebViewConsole/ConsoleView/*.swift'
   s.resource_bundles = {
-    "ConsoleView" => ['WebViewConsole/ConsoleView/Resources/*.*']
+    'ConsoleView' => ['WebViewConsole/ConsoleView/Resources/*.*']
   }
 
   s.dependency 'WebViewConsole'
